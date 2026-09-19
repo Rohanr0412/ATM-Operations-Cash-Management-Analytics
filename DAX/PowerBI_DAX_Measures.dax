@@ -1,1 +1,92 @@
+-- 1. Total Transactions
+Total Transactions =
+COUNTROWS(transactions)
 
+
+-- 2. Total Transaction Value
+Total Transaction Value =
+SUM(transactions[amount_inr])
+
+
+-- 3. Successful Transaction Rate
+Successful Transaction Rate =
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(transactions),
+        transactions[status] = "Successful"
+    ),
+    [Total Transactions],
+    0
+)
+
+
+-- 4. Failed Transaction Rate
+Failed Transaction Rate =
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(transactions),
+        transactions[status] = "Failed"
+    ),
+    [Total Transactions],
+    0
+)
+
+
+-- 5. Average Transaction Amount
+Average Transaction Amount =
+DIVIDE(
+    [Total Transaction Value],
+    [Total Transactions],
+    0
+)
+
+
+-- 6. Cash Withdrawal Value
+Cash Withdrawal Value =
+CALCULATE(
+    SUM(transactions[amount_inr]),
+    transactions[transaction_type] = "Cash Withdrawal"
+)
+
+
+-- 7. Cash Deposit Value
+Cash Deposit Value =
+CALCULATE(
+    SUM(transactions[amount_inr]),
+    transactions[transaction_type] = "Cash Deposit"
+)
+
+
+-- 8. Average Cash Utilization
+Average Cash Utilization =
+FORMAT(
+    AVERAGE(cash_inventory_daily[utilization_pct]),
+    "0.00"
+) & "%"
+
+
+-- 9. Cash-Out Rate
+Cash-Out Rate =
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(cash_inventory_daily),
+        cash_inventory_daily[cash_out_flag] = "Yes"
+    ),
+    COUNTROWS(cash_inventory_daily),
+    0
+) * 100
+
+
+-- 10. Total Replenishment Amount
+Total Replenishment Amount =
+SUM(cash_replenishments[replenishment_amount_inr])
+
+
+-- 11. Total ATM Downtime Hours
+Total ATM Downtime Hours =
+SUM(maintenance_records[downtime_hours])
+
+
+-- 12. Total Maintenance Cost
+Total Maintenance Cost =
+SUM(maintenance_records[maintenance_cost_inr])
